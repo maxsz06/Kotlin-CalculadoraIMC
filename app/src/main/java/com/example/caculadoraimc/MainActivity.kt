@@ -70,6 +70,8 @@ fun IMCScreen(modifier: Modifier = Modifier) {
         var textPesoValue by remember { mutableStateOf("") }
         var imcCalculo by remember { mutableStateOf("") }
         var imcResultado by remember { mutableStateOf("") }
+        var corResultado by remember { mutableStateOf(Color(0xFF4FA475)) }
+
 
         //--------- HEADER -----------
         Column(
@@ -164,13 +166,33 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                         val altura = textAlturaValue.replace(",", ".").toDoubleOrNull()
                         val peso = textPesoValue.replace(",", ".").toDoubleOrNull()
 
-                        if (altura == null || peso == null || altura <= 0.0 || peso <= 0.0){
+                        if (altura == null || peso == null || altura <= 0.0 || peso <= 0.0) {
                             imcCalculo = "Digite valores válidos"
                             imcResultado = ""
-                        }else{
+                            corResultado = Color(0xFF4FA475)
+                        } else {
                             val imc = peso / (altura * altura)
                             imcCalculo = "IMC: " + String.format("%.1f", imc)
-                            imcResultado = calcularImc(imc)
+
+                            if (imc < 18.5) {
+                                imcResultado = "Abaixo do peso"
+                                corResultado = Color(0xFF42A5F5)
+                            } else if (imc < 25.0) {
+                                imcResultado = "Peso normal"
+                                corResultado = Color(0xFF4FA475)
+                            } else if (imc < 30.0) {
+                                imcResultado = "Sobrepeso"
+                                corResultado = Color(0xFFF9A825)
+                            } else if (imc < 35.0) {
+                                imcResultado = "Obesidade grau I"
+                                corResultado = Color(0xFFFB8C00)
+                            } else if (imc < 40.0) {
+                                imcResultado = "Obesidade grau II"
+                                corResultado = Color(0xFFE53935)
+                            } else {
+                                imcResultado = "Obesidade grau III"
+                                corResultado = Color(0xFFB71C1C)
+                            }
                         }
                     }
                 ) {
@@ -187,7 +209,7 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                     .width(250.dp)
                     .height(75.dp),
                     colors = CardDefaults.cardColors(
-                    containerColor = Color(0xFF4FA475)
+                    containerColor = corResultado
                     )
             ) {
                 Column(
@@ -213,15 +235,6 @@ fun IMCScreen(modifier: Modifier = Modifier) {
         }
 
     }
-}
-
-fun calcularImc(imc: Double): String = when{
-    imc < 18.5 -> "Abaixo do peso"
-    imc < 25.0 -> "Peso normal"
-    imc < 30.0 -> "Sobrepeso"
-    imc < 35.0 -> "Obesidade grau I"
-    imc < 40.0 -> "Obesidade grau II"
-    else -> "Obesidade grau III"
 }
 
 @Preview(showBackground = true)
