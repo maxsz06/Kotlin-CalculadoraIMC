@@ -71,9 +71,7 @@ fun IMCScreen(modifier: Modifier = Modifier) {
         var imcCalculo by remember { mutableStateOf("") }
         var imcResultado by remember { mutableStateOf("") }
 
-
-
-        //--------- HEADER
+        //--------- HEADER -----------
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,7 +94,7 @@ fun IMCScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        //-------- FORMULÁRIO
+        //-------- FORMULÁRIO ---------------
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,7 +160,19 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.cor_app)
                     ),
-                    onClick = {}
+                    onClick = {
+                        val altura = textAlturaValue.replace(",", ".").toDoubleOrNull()
+                        val peso = textPesoValue.replace(",", ".").toDoubleOrNull()
+
+                        if (altura == null || peso == null || altura <= 0.0 || peso <= 0.0){
+                            imcCalculo = "Digite valores válidos"
+                            imcResultado = ""
+                        }else{
+                            val imc = peso / (altura * altura)
+                            imcCalculo = "IMC: " + String.format("%.1f", imc)
+                            imcResultado = calcularImc(imc)
+                        }
+                    }
                 ) {
                     Text("Calcular")
                 }
@@ -180,7 +190,6 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                     containerColor = Color(0xFF4FA475)
                     )
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -194,7 +203,6 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                         fontWeight = FontWeight.Bold
                     )
 
-
                     Text(
                         text = imcResultado,
                         color = Color.White,
@@ -205,6 +213,15 @@ fun IMCScreen(modifier: Modifier = Modifier) {
         }
 
     }
+}
+
+fun calcularImc(imc: Double): String = when{
+    imc < 18.5 -> "Abaixo do peso"
+    imc < 25.0 -> "Peso normal"
+    imc < 30.0 -> "Sobrepeso"
+    imc < 35.0 -> "Obesidade grau I"
+    imc < 40.0 -> "Obesidade grau II"
+    else -> "Obesidade grau III"
 }
 
 @Preview(showBackground = true)
