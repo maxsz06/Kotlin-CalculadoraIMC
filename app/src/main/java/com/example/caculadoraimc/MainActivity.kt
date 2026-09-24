@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -26,6 +27,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -65,6 +67,11 @@ fun IMCScreen(modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxSize()) {
 
         var textAlturaValue by remember { mutableStateOf("") }
+        var textPesoValue by remember { mutableStateOf("") }
+        var imcCalculo by remember { mutableStateOf("") }
+        var imcResultado by remember { mutableStateOf("") }
+
+
 
         //--------- HEADER
         Column(
@@ -131,8 +138,8 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                 )
 
                 OutlinedTextField(
-                    value = textAlturaValue,
-                    onValueChange = { novoValor -> textAlturaValue = novoValor },
+                    value = textPesoValue,
+                    onValueChange = { novoValor -> textPesoValue = novoValor },
                     label = { Text("Peso") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -159,11 +166,44 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                 ) {
                     Text("Calcular")
                 }
+            }
+        }
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Card(
+                modifier = Modifier
+                    .width(250.dp)
+                    .height(75.dp),
+                    colors = CardDefaults.cardColors(
+                    containerColor = Color(0xFF4FA475)
+                    )
+            ) {
 
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = imcCalculo,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+
+
+                    Text(
+                        text = imcResultado,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
 
-        // TODO: card resultado
     }
 }
 
