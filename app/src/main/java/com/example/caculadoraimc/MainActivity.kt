@@ -21,14 +21,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,9 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -163,37 +157,11 @@ fun IMCScreen(modifier: Modifier = Modifier) {
                         containerColor = colorResource(id = R.color.cor_app)
                     ),
                     onClick = {
-                        val altura = textAlturaValue.replace(",", ".").toDoubleOrNull()
-                        val peso = textPesoValue.replace(",", ".").toDoubleOrNull()
+                        val resultado = calcularImc(textAlturaValue, textPesoValue)
 
-                        if (altura == null || peso == null || altura <= 0.0 || peso <= 0.0) {
-                            imcCalculo = "Digite valores válidos"
-                            imcResultado = ""
-                            corResultado = Color(0xFF4FA475)
-                        } else {
-                            val imc = peso / (altura * altura)
-                            imcCalculo = "IMC: " + String.format("%.1f", imc)
-
-                            if (imc < 18.5) {
-                                imcResultado = "Abaixo do peso"
-                                corResultado = Color(0xFF42A5F5)
-                            } else if (imc < 25.0) {
-                                imcResultado = "Peso normal"
-                                corResultado = Color(0xFF4FA475)
-                            } else if (imc < 30.0) {
-                                imcResultado = "Sobrepeso"
-                                corResultado = Color(0xFFF9A825)
-                            } else if (imc < 35.0) {
-                                imcResultado = "Obesidade grau I"
-                                corResultado = Color(0xFFFB8C00)
-                            } else if (imc < 40.0) {
-                                imcResultado = "Obesidade grau II"
-                                corResultado = Color(0xFFE53935)
-                            } else {
-                                imcResultado = "Obesidade grau III"
-                                corResultado = Color(0xFFB71C1C)
-                            }
-                        }
+                        imcCalculo = resultado.calculo
+                        imcResultado = resultado.classificacao
+                        corResultado = resultado.cor
                     }
                 ) {
                     Text("Calcular")
